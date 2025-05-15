@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Оставить отзыв";
+}
+
+<style>
+    table {
+        border-spacing: 0 15px;
+        margin: auto;
+    }
+
+    th,
+    td {
+        width: 150px;
+        text-align: center;
+        border: none;
+        padding: 5px;
+    }
+
+    h2, h3 {
+        color: #4287f5;
+    }
+
+    .submit-button {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="text-center">
+    <h3>Оставьте отзыв о проекте здесь</h3>
+    <br />
+    <table>
+        <tr>
+            <td>Ваше имя</td>
+            <td><input type="text" name="From" /></td>
+        </tr>
+        <tr>
+            <td>Ваш отзыв</td>
+            <td><input type="text" name="Text" /></td>
+        </tr>
+    </table>
+    <div class="submit-button">
+        <input type="button" value="Отправить" onclick="ProcessForm()" />
+    </div>
+</div>
+
+<!-- <<< Блок для вывода ответа сервера >>> -->
+<div id="result-container" style="text-align: center; margin-top: 30px;"></div>
+
+<script>
+    function ProcessForm() {
+        let from = document.querySelector('[name="From"]').value.trim();
+        let text = document.querySelector('[name="Text"]').value.trim();
+
+        if (!from || !text) {
+            alert("Пожалуйста, заполните оба поля");
+            return;
+        }
+
+        let data = new FormData();
+        data.set("From", from);
+        data.set("Text", text);
+
+        let postRequest = new XMLHttpRequest();
+        postRequest.open('POST', document.URL, true);
+        postRequest.onload = function () {
+            let serverMessage = this.responseText;
+
+            // Очистим форму
+            document.querySelector('[name="From"]').value = "";
+            document.querySelector('[name="Text"]').value = "";
+
+            // Найдём наш div для вывода результата
+            let resultContainer = document.getElementById("result-container");
+
+            // Очистим предыдущий результат
+            resultContainer.innerHTML = "";
+
+            // Создаём параграф с результатом
+            let paragraph = document.createElement("h5");
+            paragraph.style.marginTop = "20px";
+            paragraph.innerText = serverMessage;
+
+            // Вставляем на страницу
+            resultContainer.appendChild(paragraph);
+        };
+
+        postRequest.send(data);
+    }
+</script>
