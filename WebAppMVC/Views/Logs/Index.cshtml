@@ -1,0 +1,28 @@
+﻿@model WebAppMVC.Models.Db.Request[]
+
+@{
+    ViewData["Title"] = "История запросов";
+}
+
+<h2>История запросов</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Дата</th>
+            <th>URL</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.Id</td>
+                <td>@log.Date</td>
+                <td>@log.Url</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
